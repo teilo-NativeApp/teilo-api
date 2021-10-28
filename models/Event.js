@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
 // SCHEMA -------------------------------------------
-const TaskSchema = new Schema({
+const EventSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -24,24 +24,23 @@ const TaskSchema = new Schema({
         ref: "Group",
         required: true
     },
-    completed: {
-        type: Boolean,
-        required: true,
-        default: false
+    date: {
+        type: Date,
+        required: true
     },
     recurring: {
       type: Boolean,
       interval: Number,
       default: false
     },
-    assignedUsers: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required: false
-      },
-      { _id: false }
-    ]
+    // participants: [ // is this really needed? A user might only be adding events that are relative to all members of the group, or might the user want to use this for events only pertaining to the individual?
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "User",
+    //     required: false
+    //   },
+    //   { _id: false }
+    // ]
 }, {
     versionKey: false,
     timestamps: true
@@ -50,6 +49,6 @@ const TaskSchema = new Schema({
 
 
 // MODEL --------------------------------------------
-const Task = model("Task", TaskSchema);
+const Event = model("Event", EventSchema);
 
-export default Task;
+export default Event;
