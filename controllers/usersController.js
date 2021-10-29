@@ -25,4 +25,48 @@ export const getAllUsers = async (req, res, next) => {
     next(error);
   };
 };
+
+export const getOneUser = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id).select("-password");
+    if (!user) throw new createError(404, `No user with id --> ${id}found`);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  };
+};
+
+export const updateUser = async (req, res, next) => {
+  // need to add hashing in case of password change
+  
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    let user = await User.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    );
+
+    if (!user) throw new createError(404, `No user with id --> ${id} found`);
+    res.send(user);
+  } catch (error) {
+    next(error);
+  };
+};
+
+export const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete( id );
+    if (!user) throw new createError(404, `No user with id --> ${id} was found`);
+    res.json({
+      success: `User with id:${id} was deleted.`,
+      user: user
+    });
+  } catch (error) {
+    next( error );
+  };
+};
 // --------------------------------------------------
