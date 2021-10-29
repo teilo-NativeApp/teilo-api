@@ -1,6 +1,8 @@
 // IMPORTS ------------------------------------------
 import express from 'express';
 import './db-connect.js';
+
+import usersRouter from "./routes/usersRouter.js"
 // --------------------------------------------------
 
 
@@ -18,6 +20,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("<h1>FlatMates API");
 });
+
+app.use("/users", usersRouter);
 // --------------------------------------------------
 
 
