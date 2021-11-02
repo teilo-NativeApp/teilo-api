@@ -17,12 +17,12 @@ const EventSchema = new Schema({
     creatorID: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: false
     },
     groupID: {
         type: Schema.Types.ObjectId,
         ref: "Group",
-        required: true
+        required: false // change to 'true' when done practicing
     },
     date: {
         type: Date,
