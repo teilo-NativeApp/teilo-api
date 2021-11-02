@@ -59,7 +59,7 @@ export const updateUser = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const user = await User.findByIdAndDelete( id );
+    const user = await User.findByIdAndDelete(id);
     if (!user) throw new createError(404, `No user with id --> ${id} was found`);
     res.json({
       success: `User with id:${id} was deleted.`,
