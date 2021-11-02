@@ -2,10 +2,14 @@ import express from 'express';
 const router = express.Router();
 
 import {
-  
-} from '../controllers/eventsController.js';
+  createTask,
+  deleteTask,
+  getAllTasks,
+  getOneTask,
+  updateTask,
+} from '../controllers/tasksController.js';
 
-router.route("/").get().post();
-router.route("/:id").get().put().delete();
+router.route("/").get(getAllTasks).post(createTask);
+router.route("/:id").get(getOneTask).put(updateTask).delete(deleteTask);
 
 export default router;

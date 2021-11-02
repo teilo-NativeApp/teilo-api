@@ -17,16 +17,15 @@ const TaskSchema = new Schema({
     creatorID: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: false
     },
     groupID: {
         type: Schema.Types.ObjectId,
         ref: "Group",
-        required: true
+        required: false // need to change to 'true' after finishing practicing
     },
     completed: {
         type: Boolean,
-        required: true,
         default: false
     },
     recurring: {
