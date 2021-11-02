@@ -2,7 +2,10 @@
 import express from 'express';
 import './db-connect.js';
 
-import usersRouter from "./routes/usersRouter.js"
+import usersRouter from "./routes/usersRouter.js";
+import groupsRouter from "./routes/groupsRouter.js";
+import eventsRouter from "./routes/eventsRouter.js";
+import tasksRouter from "./routes/tasksRouter.js";
 // --------------------------------------------------
 
 
@@ -22,6 +25,12 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", usersRouter);
+
+app.use("/groups", groupsRouter);
+
+app.use("/events", eventsRouter);
+
+app.use("/tasks", tasksRouter);
 // --------------------------------------------------
 
 
