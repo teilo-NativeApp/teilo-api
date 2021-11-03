@@ -33,6 +33,10 @@ const TaskSchema = new Schema({
       interval: Number,
       default: false
     },
+    date: {
+        type: Date,
+        required: true
+    },
     assignedUsers: [
       {
         type: Schema.Types.ObjectId,

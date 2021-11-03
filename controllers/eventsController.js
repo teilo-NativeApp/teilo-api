@@ -1,16 +1,18 @@
 // IMPORTS ------------------------------------------
 import createError from 'http-errors';
 import Event from '../models/Event.js';
+import Group from '../models/Group.js';
 // --------------------------------------------------
 
 
 // METHODS ------------------------------------------
 export const createEvent = async (req, res, next) => {
   const info = req.body;
-
+  // need to grab Group id from frontend, from the logged in user
   try {
     const event = new Event(info);
     const savedEvent = await event.save();
+    const group = await Group.findByIdAndUpdate(req.body.groupID, {$push: { events: savedEvent._id }});
     res.json(savedEvent);
   } catch (error) {
     next(error);

@@ -1,6 +1,7 @@
 // IMPORTS ------------------------------------------
 import createError from 'http-errors';
 import Task from '../models/Task.js';
+import Group from '../models/Group.js';
 // --------------------------------------------------
 
 
@@ -11,6 +12,7 @@ export const createTask = async (req, res, next) => {
   try {
     const task = new Task(info);
     const savedTask = await task.save();
+    const group = await Group.findByIdAndUpdate(req.body.groupID, {$push: { tasks: savedTask._id }});
     res.json(savedTask);
   } catch (error) {
     next(error);

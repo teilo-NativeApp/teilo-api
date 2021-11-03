@@ -1,6 +1,7 @@
 // IMPORTS ------------------------------------------
 import createError from 'http-errors';
 import Group from '../models/Group.js';
+import { threeDayRange } from '../helpers/dateFunctions.js';
 // --------------------------------------------------
 
 
@@ -28,8 +29,23 @@ export const getAllGroups = async (req, res, next) => {
 
 export const getOneGroup = async (req, res, next) => {
   const { id } = req.params;
+  const threeDaysFromNow = threeDayRange();
+  console.log(threeDaysFromNow);
   try {
-    const group = await Group.findById(id);
+    const group = await Group.findById(id)
+    .populate(
+      [{ 
+        path: 'events',
+        match: threeDayRange(),
+        select: '-createdAt -updatedAt'
+      },
+      { 
+        path: 'tasks',
+        match: threeDayRange(),
+        select: '-createdAt -updatedAt'
+      }]
+    )
+    ;
     if (!group) throw new createError(404, `No group with id --> ${id}found`);
     res.json(group);
   } catch (error) {
