@@ -28,11 +28,11 @@ const EventSchema = new Schema({
         type: Date,
         required: true
     },
-    recurring: {
-      type: Boolean,
-      interval: Number,
-      default: false
-    },
+    // recurring: {
+    //   type: Boolean,
+    //   interval: Number,
+    //   default: false
+    // },
     // participants: [ // is this really needed? A user might only be adding events that are relative to all members of the group, or might the user want to use this for events only pertaining to the individual?
     //   {
     //     type: Schema.Types.ObjectId,
