@@ -68,11 +68,35 @@ let tasksCreated = [];
       return user.save();
     });
 
+  try {
+    usersCreated = await Promise.all(userPromises);
+    console.log("------------------------------");
+    console.log("All 15 fake users have been stored to the database");
+    console.log("------------------------------");
+  } catch (error) {
+    console.log(error.message);
+  };
+
+  // Create 20 fake events
+  const eventPromises = Array(20)
+    .fill(null)
+    .map(() => {
+      const eventData = {
+        title: faker.lorem.word(),
+        description: faker.lorem.sentence(),
+        date: faker.date.soon(7)
+      };
+
+      console.log(`Created fake event with ${eventData.title} occurring on ${eventData.date}`);
+
+      const event = new Event(eventData);
+      return event.save();
+    });
 
     try {
-      usersCreated = await Promise.all(userPromises);
+      eventsCreated = await Promise.all(eventPromises);
       console.log("------------------------------");
-      console.log("All 15 fake users have been stored to the database");
+      console.log("All 20 fake events have been stored to the database");
       console.log("------------------------------");
     } catch (error) {
       console.log(error.message);
