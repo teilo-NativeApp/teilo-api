@@ -81,9 +81,7 @@ dotenv.config();
 
 UserSchema.methods.generateAuthToken = function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
-    expiresIn: "2d",
-  });
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
   console.log(`We created a token for user ${user._id} --> ${token}`);
   return token;
 };
