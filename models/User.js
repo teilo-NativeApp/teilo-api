@@ -1,5 +1,6 @@
 // IMPORTS ------------------------------------------
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 // --------------------------------------------------
 
 const { Schema, model } = mongoose;
@@ -58,6 +59,16 @@ const UserSchema = new Schema({
 }, {
     versionKey: false,
     timestamps: true
+});
+// --------------------------------------------------
+
+
+// HASHING ------------------------------------------
+UserSchema.pre("save", function (next) {
+    const user = this;
+    if (!user.isModified("password")) return next();
+    user.password = bcrypt.hashSync(user.password, 10);
+    next();
 });
 // --------------------------------------------------
 
