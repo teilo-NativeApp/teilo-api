@@ -1,5 +1,6 @@
 // IMPORTS ------------------------------------------
 import express from 'express';
+import cors from 'cors';
 import './db-connect.js';
 
 import usersRouter from "./routes/usersRouter.js";
@@ -16,6 +17,8 @@ const app = express();
 
 // MIDDLEWARE ---------------------------------------
 app.use(express.json());
+
+app.use(cors({ credentials: true }));
 // --------------------------------------------------
 
 

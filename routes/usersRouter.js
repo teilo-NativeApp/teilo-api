@@ -6,10 +6,14 @@ import {
   deleteUser,
   getAllUsers,
   getOneUser,
+  loginUser,
   updateUser
 } from '../controllers/usersController.js';
 
-router.route("/").get(getAllUsers).post(createUser);
-router.route("/:id").get(getOneUser).put(updateUser).delete(deleteUser);
+import auth from '../middleware/authentication/authenticator.js';
+
+router.route("/").get(auth, getAllUsers).post(createUser);
+router.route("/:id").get(auth, getOneUser).put(auth, updateUser).delete(auth, deleteUser);
+router.route("/login").post(loginUser);
 
 export default router;

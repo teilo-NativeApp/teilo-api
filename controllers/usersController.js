@@ -1,5 +1,6 @@
 // IMPORTS ------------------------------------------
 import createError from 'http-errors';
+import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 // --------------------------------------------------
 
@@ -68,5 +69,23 @@ export const deleteUser = async (req, res, next) => {
   } catch (error) {
     next( error );
   };
+};
+
+export const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) throw new createError(404, "User with given email not found");
+
+    const passwordIsValid = bcrypt.compareSync(password, user.password);
+    console.log("Are the hash and the pass matching --> ", passwordIsValid);
+    if (!passwordIsValid) next(createError(404, "Password is not valid"));
+
+    const token = user.generateAuthToken();
+
+    res.send({ user, token });
+  } catch (error) {
+    next(error);    
+  }
 };
 // --------------------------------------------------
