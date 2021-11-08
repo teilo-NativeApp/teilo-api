@@ -1,32 +1,33 @@
 // IMPORTS ------------------------------------------
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 // --------------------------------------------------
 
 const { Schema, model } = mongoose;
 
 // SCHEMA -------------------------------------------
-const EventSchema = new Schema({
+const EventSchema = new Schema(
+  {
     title: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
-        required: false
+      type: String,
+      required: false,
     },
     creatorID: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required: false
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: false,
     },
     groupID: {
-        type: Schema.Types.ObjectId,
-        ref: "Group",
-        required: false // change to 'true' when done practicing
+      type: Schema.Types.ObjectId,
+      ref: "Group",
+      required: false, // change to 'true' when done practicing
     },
     date: {
-        type: Date,
-        required: true
+      type: Date,
+      required: true,
     },
     // recurring: {
     //   type: Boolean,
@@ -41,12 +42,13 @@ const EventSchema = new Schema({
     //   },
     //   { _id: false }
     // ]
-}, {
+  },
+  {
     versionKey: false,
-    timestamps: true
-});
+    timestamps: true,
+  }
+);
 // --------------------------------------------------
-
 
 // MODEL --------------------------------------------
 const Event = model("Event", EventSchema);
