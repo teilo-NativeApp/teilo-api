@@ -39,12 +39,10 @@ export const getOneUser = async (req, res, next) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  // need to add hashing in case of password change
-  
   try {
     const { id } = req.params;
     const updateData = req.body;
-    let user = await User.findByIdAndUpdate(
+    let user = await User.findOneAndUpdate(
       id,
       updateData,
       { new: true }

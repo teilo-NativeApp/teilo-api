@@ -74,6 +74,10 @@ UserSchema.pre("save", function (next) {
   user.password = bcrypt.hashSync(user.password, 10);
   next();
 });
+
+UserSchema.pre("findOneAndUpdate", async function (next) {
+  this._update.password = await bcrypt.hash(this._update.password, 10);
+});
 // --------------------------------------------------
 
 // METHODS ------------------------------------------
