@@ -74,6 +74,10 @@ UserSchema.pre("save", function (next) {
   user.password = bcrypt.hashSync(user.password, 10);
   next();
 });
+
+UserSchema.pre("findOneAndUpdate", async function (next) {
+  this._update.password = await bcrypt.hash(this._update.password, 10);
+});
 // --------------------------------------------------
 
 // METHODS ------------------------------------------
@@ -81,9 +85,7 @@ dotenv.config();
 
 UserSchema.methods.generateAuthToken = function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
-    expiresIn: "2d",
-  });
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
   console.log(`We created a token for user ${user._id} --> ${token}`);
   return token;
 };

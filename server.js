@@ -18,13 +18,13 @@ const app = express();
 // MIDDLEWARE ---------------------------------------
 app.use(express.json());
 
-app.use(cors({ credentials: true }));
+app.use(cors({ origin: "http://localhost:19006", credentials: true }));
 // --------------------------------------------------
 
 
 // ROUTES -------------------------------------------
 app.get("/", (req, res) => {
-  res.send("<h1>FlatMates API");
+  res.send("<h1>FlatMates API</h1>");
 });
 
 app.use("/users", usersRouter);
