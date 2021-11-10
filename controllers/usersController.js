@@ -10,9 +10,12 @@ export const createUser = async (req, res, next) => {
   const data = req.body;
 
   try {
+    
+
     const user = new User(data);
     const savedUser = await user.save();
-    res.json(savedUser);
+    const token = savedUser.generateAuthToken();
+    res.send({savedUser, token});
   } catch (error) {
     next(error);
   };
