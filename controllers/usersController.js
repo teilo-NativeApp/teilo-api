@@ -13,7 +13,9 @@ export const createUser = async (req, res, next) => {
     const user = new User(data);
     const savedUser = await user.save();
     const token = savedUser.generateAuthToken();
-    res.send({savedUser, token});
+    const userToSend = Object.assign(savedUser.toObject(), {token});
+    console.log(req.body, savedUser, userToSend);
+    res.send(userToSend);
   } catch (error) {
     next(error);
   };
@@ -42,11 +44,16 @@ export const getOneUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
+    console.log(req.params);
+    console.log(req.body);
     const updateData = req.body;
     let user = await User.findOneAndUpdate(
-      id,
+      {_id: id},
       updateData,
-      { new: true }
+      {
+        new: true,
+        upsert: true
+      }
     );
 
     if (!user) throw new createError(404, `No user with id --> ${id} found`);
