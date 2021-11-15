@@ -2,6 +2,7 @@
 import createError from 'http-errors';
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
+import Group from '../models/Group.js';
 // --------------------------------------------------
 
 
@@ -42,12 +43,18 @@ export const getOneUser = async (req, res, next) => {
 };
 
 export const updateUser = async (req, res, next) => {
+  let user = {};
+
   try {
     const { id } = req.params;
     console.log(req.params);
     console.log(req.body);
     const updateData = req.body;
-    let user = await User.findOneAndUpdate(
+    if (req.body.groups) {
+      let group = await Group.findByIdAndUpdate(req.body.groups, {$push: {users: id}}, {new: true});
+      user = await User.findOneAndUpdate({_id: id}, {$push: {groups: req.body.groups}});
+    };
+    user = await User.findOneAndUpdate(
       {_id: id},
       updateData,
       {
