@@ -96,7 +96,9 @@ export const loginUser = async (req, res, next) => {
 
     const token = user.generateAuthToken();
 
-    res.send({ user, token });
+    const userToSend = Object.assign(user.toObject(), {token});
+
+    res.send(userToSend);
   } catch (error) {
     next(error);    
   }
