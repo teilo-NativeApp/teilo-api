@@ -96,14 +96,14 @@ UserSchema.methods.generateAuthToken = function () {
 
 // STATICS ------------------------------------------
 UserSchema.statics.verifyToken = function (token) {
-  return jwt.verify(token, JWT_KEY);
+  return jwt.verify(token, process.env.JWT_KEY);
 };
 
 UserSchema.statics.findByToken = function (token) {
   const User = this;
   let payload;
   try {
-    payload = jwt.verify(token, JWT_KEY);
+    payload = jwt.verify(token, process.env.JWT_KEY);
   } catch (error) {
     return;
   };

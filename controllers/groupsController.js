@@ -30,7 +30,7 @@ export const getAllGroups = async (req, res, next) => {
 export const getOneGroup = async (req, res, next) => {
   const { id } = req.params;
   const threeDaysFromNow = threeDayRange();
-  console.log(threeDaysFromNow);
+  
   try {
     const group = await Group.findById(id)
     .populate(

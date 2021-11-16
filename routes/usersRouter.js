@@ -13,7 +13,7 @@ import {
 import auth from '../middleware/authentication/authenticator.js';
 
 router.route("/").get(getAllUsers).post(createUser);
-router.route("/:id").get(getOneUser).put(updateUser).delete(deleteUser);
+router.route("/:id").get(getOneUser).put(auth, updateUser).delete(auth, deleteUser);
 router.route("/login").post(loginUser);
 
 export default router;
