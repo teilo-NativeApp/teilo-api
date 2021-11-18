@@ -43,22 +43,10 @@ const UserSchema = new Schema(
       },
       { _id: false },
     ],
-    // tasks: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Task",
-    //     required: false
-    //   },
-    //   { _id: false }
-    // ],
-    // events: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Event",
-    //     required: false
-    //   },
-    //   { _id: false }
-    // ],
+    balance: {
+      type: Number,
+      required: false
+    }
   },
   {
     versionKey: false,

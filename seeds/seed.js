@@ -96,6 +96,7 @@ let tasksCreated = [];
               expenseName: "EXPENSE --> " + faker.random.words(),
               totalCost: faker.datatype.number({ min: 10, max: 250 }),
               date: faker.date.soon(7),
+              whoPaid: faker.random.arrayElement(usersToAdd),
               assignedUsers: faker.random.arrayElements(usersToAdd, faker.datatype.number({ min: 2, max: 3 }))
             }
           })
@@ -147,9 +148,9 @@ let tasksCreated = [];
     .fill(null)
     .map(() => {
       const eventData = {
-        title: "EVENT --> " + faker.random.words(),
+        title: "E --> " + faker.random.words(),
         description: faker.lorem.sentence(),
-        date: faker.date.soon(7),
+        date: faker.date.soon(3),
         groupID: faker.random.arrayElement(groupsCreated)._id
       };
 
@@ -194,9 +195,9 @@ let tasksCreated = [];
     .fill(null)
     .map(() => {
       const taskData = {
-        title: "TASK --> " + faker.random.words(),
+        title: "T --> " + faker.random.words(),
         description: faker.lorem.sentence(),
-        date: faker.date.soon(7),
+        date: faker.date.soon(3),
         groupID: faker.random.arrayElement(groupsCreated)._id
       };
 

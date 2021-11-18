@@ -32,15 +32,27 @@ const GroupSchema = new Schema(
         expenseName: { type: String, required: true },
         totalCost: { type: Number, required: true },
         date: { type: Date, required: true },
+        whoPaid: {
+          type: Schema.Types.ObjectId,
+          ref: "User"
+        },
         assignedUsers: [
           {
             type: Schema.Types.ObjectId,
             ref: "User",
+            paid: {
+              type: Boolean,
+              default: false
+            }
           },
           { _id: false },
         ],
       },
     ],
+    totalSpent: {
+      type: Number,
+      default: 0
+    }
   },
   {
     versionKey: false,

@@ -2,6 +2,7 @@
 import createError from 'http-errors';
 import Group from '../models/Group.js';
 import { threeDayRange } from '../helpers/dateFunctions.js';
+import User from '../models/User.js';
 // --------------------------------------------------
 
 
@@ -43,7 +44,11 @@ export const getOneGroup = async (req, res, next) => {
         path: 'tasks',
         match: threeDayRange(),
         select: '-createdAt -updatedAt'
-      }]
+      },
+      {
+        path: 'users'
+      }
+    ]
     )
     ;
     if (!group) throw new createError(404, `No group with id --> ${id}found`);
@@ -55,15 +60,18 @@ export const getOneGroup = async (req, res, next) => {
 
 export const updateGroup = async (req, res, next) => {
   // need to add hashing in case of password change
-  
+  let group;
   try {
     const { id } = req.params;
     const updateData = req.body;
-    let group = await Group.findByIdAndUpdate(
+    if (req.body.expenses) {
+      group = await Group.findByIdAndUpdate(id, {$push: {expenses: updateData.expenses}}, {new: true})
+    } else {
+    group = await Group.findByIdAndUpdate(
       id,
       updateData,
       { new: true }
-    );
+    )};
 
     if (!group) throw new createError(404, `No group with id --> ${id} found`);
     res.send(group);
@@ -84,5 +92,31 @@ export const deleteGroup = async (req, res, next) => {
   } catch (error) {
     next( error );
   };
+};
+
+export const addExpense = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    const { totalCost } = req.body.expenses;
+    
+    const group = await Group.findByIdAndUpdate(id, {$inc: {totalSpent: totalCost}, $push: {expenses: updateData.expenses}}, {new: true});
+    
+    const amountSplit = totalCost / group.users.length;
+    const amountToPayer = amountSplit * (group.users.length - 1);
+    const negativeAmountSplit = (amountSplit * (-1));
+
+    const userWhoPaid = await User.findByIdAndUpdate(updateData.expenses.whoPaid, {$inc: {balance: amountToPayer}});
+    
+    const usersWhoDidNotPay = group.users.filter(user => {
+      return user._id != updateData.expenses.whoPaid
+    });
+
+    const usersNotPaid = await User.updateMany({_id: {$in: usersWhoDidNotPay}}, {$inc: {balance: negativeAmountSplit}});
+
+    res.send(group);
+  } catch (error) {
+    next(error);
+  }
 };
 // --------------------------------------------------
