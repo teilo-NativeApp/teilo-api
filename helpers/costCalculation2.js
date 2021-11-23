@@ -44,18 +44,27 @@ let expenses = [
 //     whoPaid: 2,
 //     assignedUsers:[1,2,3,4,5]
 //   }
-// ]
+// ];
 
 let users = [
-  { _id: 1, name: "Tim" },
-  { _id: 2, name: "Jon" },
-  { _id: 3, name: "Norm" },
-  { _id: 4, name: "Rob"},
-  { _id: 5, name: "Vasilis"}
+  { _id: 1, name: "Tim", income: 500 },
+  { _id: 2, name: "Jon", income: 500  },
+  { _id: 3, name: "Norm", income: 500  },
+  { _id: 4, name: "Rob", income: 1000 },
+  { _id: 5, name: "Vasilis", income: 750 }
 ];
 
-const prepareDataStructure = () => {
-  const balancesArray = users.map(user=>{
+const expenseCalculation = () => {
+  // create the data structure for each user
+  const prepareDataStructure = users.map(user=>{
+
+    let groupIncome = users.reduce((state, item) => {
+      return state += item.income;
+    }, 0);
+
+    let calculateProportion = (income) => {
+      return income / groupIncome
+    }
 
     let flatmates = users.filter(flatmate=>{
       return user._id !== flatmate._id
@@ -67,6 +76,7 @@ const prepareDataStructure = () => {
 
     const object = {
       ...user,
+      proportion: calculateProportion(user.income),
       overallAmount:0,
       individualBalances: flatmates
     }
@@ -74,64 +84,71 @@ const prepareDataStructure = () => {
     return object;
   })
 
-  // loop over expenses
-  // -> who paid?
-  // -> updata overallBalance
-  // -> who is splitting?
-  // -> split based on number of people
-  // -> update amount inside the paying user's individualBalances objects
-
-  // const dividedExpenses = expenses.map(expense=>{
-  //   const payingUser = balancesArray.filter(user=>{
-  //     return expense.whoPaid === user._id;
-  //   })
-  //   return payingUser;
-  // })
-  // return dividedExpenses;
-
-  const dividedExpenses = balancesArray.map(user=>{
+  // 1. first we iterate over the array of user objects
+  // 2. inside, we iterate of the expenses array to take the amounts and assign them in the appropriate fields
+  // 3. find the average of the expense based on who is sharing the cost
+  // 4. 'find' the user who paid
+  // 5. update 'user who paid's' overallAmount
+  // 6. iterate over the users who are involved in the expense
+  // 7. iterate over the individualBalances array inside the 'user who paid'
+  // 8. 'find' the users from assignedUser in individualBalances
+  // 9. update their amount with the average cost
+  // 10. we are still 'in' assigned users, now we iterate over the array of user objects
+  // 11. 'match' the users involved in the expense with their _id
+  // 12. update their overallAmount with the splitAmount which they owe to the 'user who paid'
+  // 13. iterate over the assignedUser's individualBalance array
+  // 14. 'find' the object of the 'user who paid'
+  // 15. update their amount with the splitAmount
+  
+  // 1.
+  const calculateBalances = prepareDataStructure.map(user=>{
+    // 2.
     expenses.forEach(expense=>{
+      // 3.
       const splitAmount = expense.totalCost / expense.assignedUsers.length;
+
+      // 4.
       if(user._id === expense.whoPaid){
-        const userWhoPaid = expense.whoPaid;
-        const userWereOn = user._id;
+        // 5.
         user.overallAmount += expense.totalCost;
-        // step 1
-        expense.assignedUsers.map(assignedUser=>{
-          user.individualBalances.map(individualBalance=>{
+        
+        // 6. 
+        expense.assignedUsers.forEach(assignedUser=>{
+          // 7.
+          user.individualBalances.forEach(individualBalance=>{
+            // 8.
             if(assignedUser === individualBalance._id){
+              // 9.
               individualBalance.amount += splitAmount;
             }
           })
-          balancesArray.map(userr=>{
-            if(assignedUser === userr._id){
-              userr.overallAmount -= splitAmount;
-              userr.individualBalances.map(individualBalancee=>{
-                if(individualBalancee._id === user._id){
-                  individualBalancee.amount -= splitAmount;
+          // 10.
+          prepareDataStructure.forEach(user2=>{
+            // 11.
+            if(assignedUser === user2._id){
+              // 12.
+              user2.overallAmount -= splitAmount;
+              // 13.
+              user2.individualBalances.forEach(individualBalance2=>{
+                // 14. 
+                if(individualBalance2._id === user._id){
+                  // 15.
+                  individualBalance2.amount -= splitAmount;
                 }
               })
             }
           })
         })
-        // step 2
-        // user.individualBalances.map(indBalance=>{
-        //   if(indBalance._id === expense.whoPaid){
-        //     indBalance.amount -= splitAmount;
-        //   }
-        // })
-      } else {
-        // user.overallBalance -= splitAmount;
       }
     })
     return user;
   })
-  return dividedExpenses;
+  return calculateBalances;
 };
 
-const dataStructure = prepareDataStructure();
+const result = expenseCalculation();
 
-dataStructure.forEach(i=>{
+result.forEach(i=>{
   console.log(i);
 });
 
