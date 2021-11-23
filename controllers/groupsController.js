@@ -47,10 +47,15 @@ export const getOneGroup = async (req, res, next) => {
       },
       {
         path: 'users'
+      },
+      {
+        path: "expenses",
+        populate: {
+          path: "assignedUsers",
+          select: "firstName income"
+        }
       }
-    ]
-    )
-    ;
+    ]);
     if (!group) throw new createError(404, `No group with id --> ${id}found`);
     res.json(group);
   } catch (error) {
