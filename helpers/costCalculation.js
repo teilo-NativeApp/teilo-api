@@ -63,47 +63,6 @@ let authData = {
 };
 
 
-
-const calculation = (expenses) => {
-  
-  const splitExpenses = expenses.map(expense => {
-    let amountSplit = expense.totalCost / users.length;
-    let amountToPayer = amountSplit * (users.length - 1);
-    let negativeSplitAmount = amountSplit * (-1);
-
-    const usersWhoDidNotPay = users.filter(user => {
-      return user._id != expense.whoPaid
-    });
-
-    const assignedAmountToNonpayers = usersWhoDidNotPay.map(user => {
-      let result = {
-        _id: user._id,
-        amount: negativeSplitAmount
-      };
-      console.log(result);
-      return result;
-    });
-
-    return {
-      _id: expense.whoPaid,
-      overallBalance: amountToPayer,
-      balances: assignedAmountToNonpayers
-    }
-  })
-
-  return splitExpenses;
-  
-  // const balances = expenses.reduce((state, item) => {
-  //   if (state[item.whoPaid]) {
-  //     state[item.whoPaid]
-  //   } else {
-  //     state.push({_id: item.whoPaid, amountPaid: item.totalCost})
-  //   }
-  // }, [])
-};
-
-console.log(calculation(expenses));
-
 /*
 desiredOutput = [
   { 

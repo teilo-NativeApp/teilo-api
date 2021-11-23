@@ -32,7 +32,7 @@ const TaskSchema = new Schema(
     recurring: {
       type: Boolean,
       interval: Number,
-      default: false,
+      default: false
     },
     date: {
       type: Date,
