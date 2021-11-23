@@ -106,17 +106,42 @@ export const addExpense = async (req, res, next) => {
     const amountToPayer = amountSplit * (group.users.length - 1);
     const negativeAmountSplit = (amountSplit * (-1));
 
-    const userWhoPaid = await User.findByIdAndUpdate(updateData.expenses.whoPaid, {$inc: {balance: amountToPayer}});
-    
     const usersWhoDidNotPay = group.users.filter(user => {
       return user._id != updateData.expenses.whoPaid
     });
 
-    const usersNotPaid = await User.updateMany({_id: {$in: usersWhoDidNotPay}}, {$inc: {balance: negativeAmountSplit}});
+    const userWhoPaid = await User.findByIdAndUpdate(updateData.expenses.whoPaid, {$inc: {balanceOverall: amountToPayer}});
+
+    const usersNotPaid = await User.updateMany({_id: {$in: usersWhoDidNotPay}}, {$inc: {balanceOverall: negativeAmountSplit}});
 
     res.send(group);
   } catch (error) {
     next(error);
   }
 };
+
+// export const updateBalanceToUser = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const updateData = req.body;
+//     const { totalCost } = req.body.expenses;
+    
+//     const group = await Group.findById(id);
+    
+//     const amountSplit = totalCost / group.users.length;
+//     const amountToPayer = amountSplit * (group.users.length - 1);
+//     const negativeAmountSplit = (amountSplit * (-1));
+
+//     const usersWhoDidNotPay = group.users.filter(user => {
+//       return user._id != updateData.expenses.whoPaid
+//     });
+
+//     const userWhoPaid = await User.findByIdAndUpdate(updateData.expenses.whoPaid, {balanceToUser: {user: , amount: }});
+
+//     const usersNotPaid = await User.updateMany({_id: {$in: usersWhoDidNotPay}}, {$inc: {balanceOverall: negativeAmountSplit}});
+
+//   } catch (error) {
+    
+//   }
+// }
 // --------------------------------------------------

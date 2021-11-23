@@ -43,10 +43,27 @@ const UserSchema = new Schema(
       },
       { _id: false },
     ],
-    balance: {
+    balanceOverall: {
       type: Number,
       required: false
-    }
+    },
+    balanceToUser: [
+      {
+        user: {
+          type: Schema.Types.ObjectId,
+          ref: 'User'
+      },
+        amount: {
+          type: Number,
+          required: false
+      },
+      //   settled: {
+      //     type: Boolean,
+      //     default: false
+      // }
+    },
+      { _id: false }
+    ]
   },
   {
     versionKey: false,
