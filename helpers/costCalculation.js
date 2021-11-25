@@ -1,3 +1,5 @@
+// TO BE USED IN THE FRONTEND UI
+
 let expenses = [
   {
     expenseName: "groceries",
@@ -119,14 +121,13 @@ const expenseCalculationByIncome = () => {
       let assigneesIncome = expense.assignedUsers.reduce((state, item) => {
         return state += item.income;
       }, 0);
-      console.log("assigneesIncome", assigneesIncome);
       
       // 4.
       if(user._id === expense.whoPaid){
         // 3.
         const amountOwed = expense.totalCost * (1-(user.income / assigneesIncome));
         // 5.
-        user.overallAmount += roundToTwoDecimals(amountOwed);
+        user.overallAmount = roundToTwoDecimals(user.overallAmount + amountOwed);
         
         // 6. 
         expense.assignedUsers.forEach(assignedUser=>{
@@ -136,7 +137,7 @@ const expenseCalculationByIncome = () => {
             // 8.
             if(assignedUser._id === individualBalance._id){
               // 9.
-              individualBalance.amount += roundToTwoDecimals(assigneeSplit);
+              individualBalance.amount = roundToTwoDecimals(individualBalance.amount + assigneeSplit);
             }
           })
           // 10.
@@ -145,14 +146,14 @@ const expenseCalculationByIncome = () => {
             // 11.
             if(assignedUser._id === user2._id && user._id !== user2._id){
               // 12.
-              user2.overallAmount -= roundToTwoDecimals(assigneeSplit);
-              // user2.overallAmount -= assigneeSplit;
+              user2.overallAmount = roundToTwoDecimals(user2.overallAmount - assigneeSplit);
+              
               // 13.
               user2.individualBalances.forEach(individualBalance2=>{
                 // 14. 
                 if(individualBalance2._id === user._id){
                   // 15.
-                  individualBalance2.amount -= roundToTwoDecimals(assigneeSplit);
+                  individualBalance2.amount = roundToTwoDecimals(individualBalance2.amount - assigneeSplit);
                 }
               })
             }

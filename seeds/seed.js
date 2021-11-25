@@ -90,14 +90,17 @@ let tasksCreated = [];
       // Function to fill expense field in the group model
       const expensesArr = () => {
         return Array(3)
-          .fill(null)
-          .map(() => {
+        .fill(null)
+        .map(() => {
+          const userWhoPaid = faker.random.arrayElement(usersToAdd);
+          let usersToAssign = faker.random.arrayElements(usersToAdd, faker.datatype.number({ min: 2, max: 3 }));
+            
             return {
               expenseName: "EXPENSE --> " + faker.random.words(),
               totalCost: faker.datatype.number({ min: 10, max: 250 }),
               date: faker.date.soon(7),
-              whoPaid: faker.random.arrayElement(usersToAdd),
-              assignedUsers: faker.random.arrayElements(usersToAdd, faker.datatype.number({ min: 2, max: 3 }))
+              whoPaid: userWhoPaid,
+              assignedUsers: usersToAssign.includes(userWhoPaid) ? usersToAssign : [...usersToAssign, userWhoPaid]
             }
           })
       };
