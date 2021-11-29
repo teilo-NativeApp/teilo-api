@@ -99,7 +99,6 @@ let tasksCreated = [];
               expenseName: "EXPENSE --> " + faker.random.words(),
               totalCost: faker.datatype.number({ min: 10, max: 250 }),
               date: faker.date.soon(7),
-              incomeBased: faker.datatype.boolean(),
               whoPaid: userWhoPaid,
               assignedUsers: usersToAssign.includes(userWhoPaid) ? usersToAssign : [...usersToAssign, userWhoPaid]
             }
@@ -107,6 +106,7 @@ let tasksCreated = [];
       };
       const groupData = {
         groupName: faker.address.city(),
+        incomeBased: faker.datatype.boolean(),
         address: faker.address.streetAddress(),
         users: usersToAdd,
         expenses: expensesArr()
