@@ -33,6 +33,7 @@ const GroupSchema = new Schema(
         totalCost: { type: Number, required: true },
         date: { type: Date, required: true },
         settled: { type: Boolean, default: false },
+        incomeBased: { type: Boolean, default: false },
         whoPaid: {
           type: Schema.Types.ObjectId,
           ref: "User"
