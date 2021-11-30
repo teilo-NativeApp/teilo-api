@@ -96,7 +96,7 @@ let tasksCreated = [];
           let usersToAssign = faker.random.arrayElements(usersToAdd, faker.datatype.number({ min: 2, max: 3 }));
             
             return {
-              expenseName: "EXPENSE --> " + faker.random.words(),
+              expenseName: faker.random.words(),
               totalCost: faker.datatype.number({ min: 10, max: 250 }),
               date: faker.date.soon(7),
               whoPaid: userWhoPaid,
@@ -152,7 +152,7 @@ let tasksCreated = [];
     .fill(null)
     .map(() => {
       const eventData = {
-        title: "E --> " + faker.random.words(),
+        title: faker.random.words(),
         description: faker.lorem.sentence(),
         date: faker.date.soon(3),
         groupID: faker.random.arrayElement(groupsCreated)._id
@@ -199,7 +199,7 @@ let tasksCreated = [];
     .fill(null)
     .map(() => {
       const taskData = {
-        title: "T --> " + faker.random.words(),
+        title: faker.random.words(),
         description: faker.lorem.sentence(),
         date: faker.date.soon(3),
         groupID: faker.random.arrayElement(groupsCreated)._id
