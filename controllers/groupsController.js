@@ -9,7 +9,7 @@ import User from '../models/User.js';
 // METHODS ------------------------------------------
 export const createGroup = async (req, res, next) => {
   const data = req.body;
-
+  console.log("Creating a group with --> ", data);
   try {
     const group = new Group(data);
     const savedGroup = await group.save();
@@ -52,7 +52,7 @@ export const getOneGroup = async (req, res, next) => {
         path: "expenses",
         populate: {
           path: "assignedUsers",
-          select: "firstName income"
+          select: "firstName"
         }
       }
     ]);
@@ -65,18 +65,85 @@ export const getOneGroup = async (req, res, next) => {
 
 export const updateGroup = async (req, res, next) => {
   // need to add hashing in case of password change
+  const threeDaysFromNow = threeDayRange();
+
   let group;
   try {
     const { id } = req.params;
     const updateData = req.body;
     if (req.body.expenses) {
-      group = await Group.findByIdAndUpdate(id, {$push: {expenses: updateData.expenses}}, {new: true})
+      group = await Group.findByIdAndUpdate(id, {$push: {expenses: updateData.expenses}}, {new: true}).populate(
+        [{ 
+          path: 'events',
+          match: threeDayRange(),
+          select: '-createdAt -updatedAt'
+        },
+        { 
+          path: 'tasks',
+          match: threeDayRange(),
+          select: '-createdAt -updatedAt'
+        },
+        {
+          path: 'users'
+        },
+        {
+          path: "expenses",
+          populate: {
+            path: "assignedUsers",
+            select: "firstName"
+          }
+        }
+      ])
+    } else if (req.body._id) {
+      group = await Group.findByIdAndUpdate(id, {$push: {users: updateData._id}}, {new: true}).populate(
+        [{ 
+          path: 'events',
+          match: threeDayRange(),
+          select: '-createdAt -updatedAt'
+        },
+        { 
+          path: 'tasks',
+          match: threeDayRange(),
+          select: '-createdAt -updatedAt'
+        },
+        {
+          path: 'users'
+        },
+        {
+          path: "expenses",
+          populate: {
+            path: "assignedUsers",
+            select: "firstName"
+          }
+        }
+      ])
     } else {
     group = await Group.findByIdAndUpdate(
       id,
       updateData,
       { new: true }
-    )};
+    ).populate(
+      [{ 
+        path: 'events',
+        match: threeDayRange(),
+        select: '-createdAt -updatedAt'
+      },
+      { 
+        path: 'tasks',
+        match: threeDayRange(),
+        select: '-createdAt -updatedAt'
+      },
+      {
+        path: 'users'
+      },
+      {
+        path: "expenses",
+        populate: {
+          path: "assignedUsers",
+          select: "firstName"
+        }
+      }
+    ])};
 
     if (!group) throw new createError(404, `No group with id --> ${id} found`);
     res.send(group);
