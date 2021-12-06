@@ -52,7 +52,7 @@ export const getOneGroup = async (req, res, next) => {
         path: "expenses",
         populate: {
           path: "assignedUsers",
-          select: "firstName"
+          select: "firstName income"
         }
       }
     ]);

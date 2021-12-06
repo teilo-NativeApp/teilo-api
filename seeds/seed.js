@@ -195,28 +195,50 @@ let tasksCreated = [];
   // Create OUR group
   const ourUserIDs = ourSavedUsers.map(user => user._id);
   console.log("*********************************", ourUserIDs);
-  const expensesArr = () => {
-    return Array(3)
-    .fill(null)
-    .map(() => {
-      const userWhoPaid = faker.random.arrayElement(ourUserIDs);
-      let usersToAssign = faker.random.arrayElements(ourUserIDs, faker.datatype.number({ min: 2, max: 3 }));
+  const ourUserWhoPaid = faker.random.arrayElement(ourUserIDs);
+  let ourUsersToAssign = faker.random.arrayElements(ourUserIDs, faker.datatype.number({ min: 2, max: 3 }));
+  // const expensesArr = () => {
+  //   return Array(3)
+  //   .fill(null)
+  //   .map(() => {
         
-        return {
-          expenseName: faker.random.words(),
-          totalCost: faker.datatype.number({ min: 10, max: 250 }),
-          date: faker.date.soon(7),
-          whoPaid: userWhoPaid,
-          assignedUsers: usersToAssign.includes(userWhoPaid) ? usersToAssign : [...usersToAssign, userWhoPaid]
-        }
-      })
-  };
+  //       return {
+  //         expenseName: faker.random.words(),
+  //         totalCost: faker.datatype.number({ min: 10, max: 250 }),
+  //         date: faker.date.soon(7),
+  //         whoPaid: userWhoPaid,
+  //         assignedUsers: usersToAssign.includes(userWhoPaid) ? usersToAssign : [...usersToAssign, userWhoPaid]
+  //       }
+  //     })
+  // };
   const ourGroup = {
     groupName: "Room 7",
     incomeBased: true,
     address: "Vulkanstr. 1, Berlin",
     users: ourUserIDs,
-    expenses: expensesArr()
+    expenses: [
+      {
+        expenseName: "groceries",
+        totalCost: 75,
+        date: "2021-12-06T15:00:00.000Z",
+        whoPaid: ourUserWhoPaid,
+        assignedUsers: ourUsersToAssign.includes(ourUserWhoPaid) ? ourUsersToAssign : [...ourUsersToAssign, ourUserWhoPaid]
+      },
+      {
+        expenseName: "cleaning supplies",
+        totalCost: 19,
+        date: "2021-12-05T15:00:00.000Z",
+        whoPaid: ourUserWhoPaid,
+        assignedUsers: ourUsersToAssign.includes(ourUserWhoPaid) ? ourUsersToAssign : [...ourUsersToAssign, ourUserWhoPaid]
+      },
+      {
+        expenseName: "Indian take-away",
+        totalCost: 37,
+        date: "2021-12-04T15:00:00.000Z",
+        whoPaid: ourUserWhoPaid,
+        assignedUsers: ourUsersToAssign.includes(ourUserWhoPaid) ? ourUsersToAssign : [...ourUsersToAssign, ourUserWhoPaid]
+      },
+    ]
   };
     
   console.log(`Created our group ${ourGroup.groupName} with users ${ourGroup.users}`);
