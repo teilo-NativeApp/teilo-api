@@ -79,6 +79,51 @@ let tasksCreated = [];
     console.log(error.message);
   };
   //--------------------------------------------
+  
+  // Create OUR user objects
+  let ourSavedUsers = [];
+  const ourUserArray = [
+    {
+      username: "jon",
+      email: "jon@teilo.com",
+      password: "room7forlife",
+      firstName: "Jonathan",
+      lastName: "Shine",
+      income: 1000,
+      groups: [],
+      color: "#FC8B0A"
+    },
+    {
+      username: "tim",
+      email: "tim@teilo.com",
+      password: "room7forlife",
+      firstName: "Tim",
+      lastName: "Jungmann",
+      income: 1500,
+      groups: [],
+      color: "#0263F5"
+    },
+    {
+      username: "norm",
+      email: "norm@teilo.com",
+      password: "room7forlife",
+      firstName: "Norman",
+      lastName: "Metz",
+      income: 2000,
+      groups: [],
+      color: "#49CE30"
+    }
+  ].map((newUser) => {
+    console.log("*******************************");
+    console.log(`Created user "${newUser.username}" with email ${newUser.email} and password ${newUser.password}`);
+    console.log("*******************************");
+
+    const user = new User(newUser);
+    return user.save();
+    });
+
+    ourSavedUsers = await Promise.all(ourUserArray);
+  //--------------------------------------------
 
   // Create 5 fake groups
   const userIDs = usersCreated.map(user => user._id);
@@ -146,6 +191,46 @@ let tasksCreated = [];
     console.log(error.message);
   };
   //--------------------------------------------
+  
+  // Create OUR group
+  const ourUserIDs = ourSavedUsers.map(user => user._id);
+  console.log("*********************************", ourUserIDs);
+  const expensesArr = () => {
+    return Array(3)
+    .fill(null)
+    .map(() => {
+      const userWhoPaid = faker.random.arrayElement(ourUserIDs);
+      let usersToAssign = faker.random.arrayElements(ourUserIDs, faker.datatype.number({ min: 2, max: 3 }));
+        
+        return {
+          expenseName: faker.random.words(),
+          totalCost: faker.datatype.number({ min: 10, max: 250 }),
+          date: faker.date.soon(7),
+          whoPaid: userWhoPaid,
+          assignedUsers: usersToAssign.includes(userWhoPaid) ? usersToAssign : [...usersToAssign, userWhoPaid]
+        }
+      })
+  };
+  const ourGroup = {
+    groupName: "Room 7",
+    incomeBased: true,
+    address: "Vulkanstr. 1, Berlin",
+    users: ourUserIDs,
+    expenses: expensesArr()
+  };
+    
+  console.log(`Created our group ${ourGroup.groupName} with users ${ourGroup.users}`);
+
+  let ourSavedGroup = new Group(ourGroup);
+  ourSavedGroup = await ourSavedGroup.save();
+
+  // Assign the users with the correct groupID
+  const ourUsersUpdated = await User.updateMany(
+      { _id: { $in: ourSavedGroup.users } },
+      { $push: { groups : ourSavedGroup._id } },
+      { multi: true, upsert: false }
+  );
+  //--------------------------------------------
 
   // Create 20 fake events
   const eventPromises = Array(20)
@@ -192,6 +277,58 @@ let tasksCreated = [];
   } catch (error) {
     console.log(error.message);
   };
+  //--------------------------------------------
+  
+  // Create OUR events
+  let ourSavedEvents = [];
+  const ourEvents = [
+    {
+      title: "Movie night",
+      description: "comedy or drama?",
+      date: "2021-12-06T20:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+    {
+      title: "Night on the town!",
+      description: "to drink, or not to drink?",
+      date: "2021-12-06T22:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+    {
+      title: "Roommate meeting",
+      description: "chore assignment",
+      date: "2021-12-07T15:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+    {
+      title: "Weihnachtsmarkt",
+      description: "Glühwein!",
+      date: "2021-12-08T18:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+    {
+      title: "Apartment yoga",
+      description: "Namaste",
+      date: "2021-12-09T15:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+  ].map((newEvent) => {
+      console.log(`Created fake event ${newEvent.title} occurring on ${newEvent.date}`);
+
+      const event = new Event(newEvent);
+      return event.save();
+    });
+
+    ourSavedEvents = await Promise.all(ourEvents); 
+
+  // Add the events inside of the group according to groupID
+  // ourSavedEvents.map(event => {
+  //   const 
+  // const ourGroupUpdated = await Group.findByIdAndUpdate(
+  //     ourSavedGroup._id,
+  //     { $push: { events: { $each: ourSavedEvents } } },
+  //     { new: true }
+  //   );
   //--------------------------------------------
 
   // Create 20 fake tasks
@@ -258,6 +395,57 @@ let tasksCreated = [];
     console.log(error.message);
   };
   //--------------------------------------------
+
+  // Create OUR Tasks
+  let ourSavedTasks = [];
+  const ourTasks = [
+    {
+      title: "DCI Final Presentation",
+      description: "DCI Final Presentation",
+      date: "2021-12-06T15:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+    {
+      title: "Clean kitchen",
+      description: "Clean kitchen",
+      date: "2021-12-06T16:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+    {
+      title: "Sort basement",
+      description: "Sort basement",
+      date: "2021-12-06T17:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+    {
+      title: "Grocery shopping",
+      description: "Grocery shopping",
+      date: "2021-12-06T18:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+    {
+      title: "Paint living room",
+      description: "Paint living room",
+      date: "2021-12-06T19:00:00.000Z",
+      groupID: ourSavedGroup._id
+    },
+  ].map((newTask) => {
+    console.log(`Created fake tasks ${newTask.title} occurring on ${newTask.date}`);
+
+      const task = new Task(newTask);
+      return task.save();
+  });
+
+  ourSavedTasks = await Promise.all(ourTasks);
+
+  const ourGroupUpdated = await Group.findByIdAndUpdate(
+    ourSavedGroup._id,
+    { $push: { events: { $each: ourSavedEvents },
+      tasks: { $each: ourSavedTasks } } },
+    { new: true }
+  );
+
+  console.log(ourGroupUpdated);
 
   // Close the connection to the database
   mongoose.connection.close();

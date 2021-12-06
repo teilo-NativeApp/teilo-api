@@ -43,6 +43,10 @@ const UserSchema = new Schema(
       },
       { _id: false },
     ],
+    color: {
+      type: String,
+      required: false
+    }
   },
   {
     versionKey: false,
