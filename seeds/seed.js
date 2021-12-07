@@ -195,8 +195,8 @@ let tasksCreated = [];
   // Create OUR group
   const ourUserIDs = ourSavedUsers.map(user => user._id);
   console.log("*********************************", ourUserIDs);
-  const ourUserWhoPaid = faker.random.arrayElement(ourUserIDs);
-  let ourUsersToAssign = faker.random.arrayElements(ourUserIDs, faker.datatype.number({ min: 2, max: 3 }));
+  // const ourUserWhoPaid = faker.random.arrayElement(ourUserIDs);
+  // let ourUsersToAssign = faker.random.arrayElements(ourUserIDs, faker.datatype.number({ min: 2, max: 3 }));
   // const expensesArr = () => {
   //   return Array(3)
   //   .fill(null)
@@ -221,22 +221,22 @@ let tasksCreated = [];
         expenseName: "groceries",
         totalCost: 75,
         date: "2021-12-06T15:00:00.000Z",
-        whoPaid: ourUserWhoPaid,
-        assignedUsers: ourUsersToAssign.includes(ourUserWhoPaid) ? ourUsersToAssign : [...ourUsersToAssign, ourUserWhoPaid]
+        whoPaid: ourUserIDs[0],
+        assignedUsers: [ourUserIDs[0], ourUserIDs[1], ourUserIDs[2]]
       },
       {
         expenseName: "cleaning supplies",
         totalCost: 19,
         date: "2021-12-05T15:00:00.000Z",
-        whoPaid: ourUserWhoPaid,
-        assignedUsers: ourUsersToAssign.includes(ourUserWhoPaid) ? ourUsersToAssign : [...ourUsersToAssign, ourUserWhoPaid]
+        whoPaid: ourUserIDs[2],
+        assignedUsers: [ourUserIDs[0], ourUserIDs[1], ourUserIDs[2]]
       },
       {
         expenseName: "Indian take-away",
-        totalCost: 37,
+        totalCost: 24,
         date: "2021-12-04T15:00:00.000Z",
-        whoPaid: ourUserWhoPaid,
-        assignedUsers: ourUsersToAssign.includes(ourUserWhoPaid) ? ourUsersToAssign : [...ourUsersToAssign, ourUserWhoPaid]
+        whoPaid: ourUserIDs[1],
+        assignedUsers: [ourUserIDs[1], ourUserIDs[0]]
       },
     ]
   };
@@ -307,25 +307,25 @@ let tasksCreated = [];
     {
       title: "Movie night",
       description: "comedy or drama?",
-      date: "2021-12-06T20:00:00.000Z",
+      date: "2021-12-08T20:00:00.000Z",
       groupID: ourSavedGroup._id
     },
     {
       title: "Night on the town!",
       description: "to drink, or not to drink?",
-      date: "2021-12-06T22:00:00.000Z",
+      date: "2021-12-09T22:00:00.000Z",
       groupID: ourSavedGroup._id
     },
     {
       title: "Roommate meeting",
       description: "chore assignment",
-      date: "2021-12-07T15:00:00.000Z",
+      date: "2021-12-10T15:00:00.000Z",
       groupID: ourSavedGroup._id
     },
     {
       title: "Weihnachtsmarkt",
       description: "Glühwein!",
-      date: "2021-12-08T18:00:00.000Z",
+      date: "2021-12-11T18:00:00.000Z",
       groupID: ourSavedGroup._id
     },
     {
@@ -424,31 +424,31 @@ let tasksCreated = [];
     {
       title: "DCI Final Presentation",
       description: "DCI Final Presentation",
-      date: "2021-12-06T15:00:00.000Z",
+      date: "2021-12-08T15:00:00.000Z",
       groupID: ourSavedGroup._id
     },
     {
       title: "Clean kitchen",
       description: "Clean kitchen",
-      date: "2021-12-06T16:00:00.000Z",
+      date: "2021-12-08T16:00:00.000Z",
       groupID: ourSavedGroup._id
     },
     {
       title: "Sort basement",
       description: "Sort basement",
-      date: "2021-12-06T17:00:00.000Z",
+      date: "2021-12-09T17:00:00.000Z",
       groupID: ourSavedGroup._id
     },
     {
       title: "Grocery shopping",
       description: "Grocery shopping",
-      date: "2021-12-06T18:00:00.000Z",
+      date: "2021-12-10T18:00:00.000Z",
       groupID: ourSavedGroup._id
     },
     {
       title: "Paint living room",
       description: "Paint living room",
-      date: "2021-12-06T19:00:00.000Z",
+      date: "2021-12-11T19:00:00.000Z",
       groupID: ourSavedGroup._id
     },
   ].map((newTask) => {

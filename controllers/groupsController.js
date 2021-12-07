@@ -90,7 +90,7 @@ export const updateGroup = async (req, res, next) => {
           path: "expenses",
           populate: {
             path: "assignedUsers",
-            select: "firstName"
+            select: "firstName income"
           }
         }
       ])
@@ -113,7 +113,7 @@ export const updateGroup = async (req, res, next) => {
           path: "expenses",
           populate: {
             path: "assignedUsers",
-            select: "firstName"
+            select: "firstName income"
           }
         }
       ])
@@ -140,7 +140,7 @@ export const updateGroup = async (req, res, next) => {
         path: "expenses",
         populate: {
           path: "assignedUsers",
-          select: "firstName"
+          select: "firstName income"
         }
       }
     ])};
